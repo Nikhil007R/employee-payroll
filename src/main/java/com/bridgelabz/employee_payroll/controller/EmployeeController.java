@@ -25,23 +25,27 @@ public class EmployeeController {
         return service.getAllEmployees();
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable int id){
+        return service.findById(id);
+    }
+
     @PostMapping("/create")
-    public Employee createEmployee(@RequestBody Employee employee){
+    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDTO employee){
         return service.createEmployee(employee);
     }
 
     @PutMapping("/update/{id}")
-    public String updateEmployee(@PathVariable int id, @RequestBody Employee employee){
-        if(service.updateEmployee(id, employee) != null){
-            return "Updated Successfully";
-        }
-        return "Not Updated";
-
-
+    public ResponseEntity<Employee> updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employee){
+//        if(service.updateEmployee(id, employee) != null){
+//            return "Updated Successfully";
+//        }
+//        return "Not Updated";
+        return service.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable int id){
+    public ResponseEntity<String> deleteEmployee(@PathVariable int id){
         return service.deleteEmployee(id);
     }
 
