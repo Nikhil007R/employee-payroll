@@ -4,6 +4,7 @@ import com.bridgelabz.employee_payroll.dto.EmployeeDTO;
 import com.bridgelabz.employee_payroll.dto.ResponseDTO;
 import com.bridgelabz.employee_payroll.model.Employee;
 import com.bridgelabz.employee_payroll.repository.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class EmployeeService implements IEmployeeService{
 
     @Autowired
@@ -24,9 +26,13 @@ public class EmployeeService implements IEmployeeService{
 
     public ResponseEntity<Employee> findById(int id){
         Employee employee = repository.findById(id).orElse(null);
+
+
         if(employee != null){
+            log.info("Found id successfully: ");
             return new ResponseEntity<>(employee, HttpStatus.OK);
         }
+        log.info("did'nt found id: ");
         return new ResponseEntity<>(employee, HttpStatus.BAD_REQUEST);
 //        return employee;
     }
@@ -38,9 +44,11 @@ public class EmployeeService implements IEmployeeService{
         emp.setSalary(employee.getSalary());
         if(emp.getName() != null && (emp.getSalary() != 0)){
             repository.save(emp);
+            log.info("Created successfully: ");
             return new ResponseEntity<>(emp, HttpStatus.CREATED);
         }
 
+        log.info("Employee not created: ");
         return new ResponseEntity<>(emp, HttpStatus.BAD_REQUEST);
 //        return repository.save(employee);
     }
@@ -62,11 +70,12 @@ public class EmployeeService implements IEmployeeService{
         Optional<Employee> isAvailable =  repository.findById(id);
         if(isAvailable.isPresent()) {
             repository.deleteById(id);
+            log.info("Successfully Deleted");
             return new ResponseEntity<>("Successfully Deleted", HttpStatus.OK);
         }
-        else{
+            log.info("Deleted Unsuccessfull: ");
             return new ResponseEntity<>("Deletion Unsuccessfull", HttpStatus.BAD_REQUEST);
-        }
+
     }
 
 //    public ResponseEntity<ResponseDTO> createEmployee1(EmployeeDTO employee){
@@ -74,7 +83,6 @@ public class EmployeeService implements IEmployeeService{
 //        Employee emp = repository.findById()
 //    }
     public ResponseEntity<ResponseDTO> updateEmployee2(int id, EmployeeDTO employee){
-
         Employee emp = repository.findById(id).orElse(null);
 
         if(emp != null){
@@ -82,10 +90,12 @@ public class EmployeeService implements IEmployeeService{
             emp.setName(employee.getName());
             repository.save(emp);
 
+            log.info("Updated Successfully!");
             ResponseDTO response = new ResponseDTO("Employee Updated Successfully", emp);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
+        log.info("Unsuccessfull updation");
         ResponseDTO response = new ResponseDTO("Employee not found Successfully", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 

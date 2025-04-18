@@ -36,12 +36,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employee){
+    public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employee){
 //        if(service.updateEmployee(id, employee) != null){
 //            return "Updated Successfully";
 //        }
 //        return "Not Updated";
-        return service.updateEmployee(id, employee);
+        return service.updateEmployee2(id, employee);
     }
 
     @DeleteMapping("/delete/{id}")
