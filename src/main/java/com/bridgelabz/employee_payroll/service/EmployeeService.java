@@ -2,6 +2,7 @@ package com.bridgelabz.employee_payroll.service;
 
 import com.bridgelabz.employee_payroll.dto.EmployeeDTO;
 import com.bridgelabz.employee_payroll.dto.ResponseDTO;
+import com.bridgelabz.employee_payroll.exception.EmployeeNotFoundException;
 import com.bridgelabz.employee_payroll.model.Employee;
 import com.bridgelabz.employee_payroll.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class EmployeeService implements IEmployeeService{
     }
 
     public ResponseEntity<Employee> findById(int id){
-        Employee employee = repository.findById(id).orElse(null);
+        Employee employee = repository.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee with " + id + " not found"));
 
 
         if(employee != null){
