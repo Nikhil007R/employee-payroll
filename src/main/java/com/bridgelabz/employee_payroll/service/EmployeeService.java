@@ -27,8 +27,6 @@ public class EmployeeService implements IEmployeeService{
 
     public ResponseEntity<Employee> findById(int id){
         Employee employee = repository.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee with " + id + " not found"));
-
-
         if(employee != null){
             log.info("Found id successfully: ");
             return new ResponseEntity<>(employee, HttpStatus.OK);
@@ -39,18 +37,22 @@ public class EmployeeService implements IEmployeeService{
     }
 
     public ResponseEntity<Employee> createEmployee(EmployeeDTO employee){
-        Employee emp = new Employee();
+        Employee emp = new Employee(employee);
 
-        emp.setName(employee.getName());
-        emp.setSalary(employee.getSalary());
-        if(emp.getName() != null && (emp.getSalary() != 0)){
-            repository.save(emp);
-            log.info("Created successfully: ");
-            return new ResponseEntity<>(emp, HttpStatus.CREATED);
-        }
+//        emp.setName(employee.getName());
+//        emp.setSalary(employee.getSalary());
+//        if(emp.getName() != null && (emp.getSalary() != 0)){
+//            repository.save(emp);
+//            log.info("Created successfully: ");
+//            return new ResponseEntity<>(emp, HttpStatus.CREATED);
+//        }
 
-        log.info("Employee not created: ");
-        return new ResponseEntity<>(emp, HttpStatus.BAD_REQUEST);
+//        log.info("Employee not created: ");
+//        return new ResponseEntity<>(emp, HttpStatus.BAD_REQUEST);
+        repository.save(emp);
+        log.info("Employee created with id: {} " + emp.getEmployeeId());
+        return  new ResponseEntity<>(emp, HttpStatus.CREATED);
+
 //        return repository.save(employee);
     }
 
@@ -87,8 +89,14 @@ public class EmployeeService implements IEmployeeService{
         Employee emp = repository.findById(id).orElse(null);
 
         if(emp != null){
-            emp.setSalary(employee.getSalary());
-            emp.setName(employee.getName());
+            if (employee.getName() != null) emp.setName(employee.getName());
+            if (employee.getSalary() != 0) emp.setSalary(employee.getSalary());
+            if (employee.getDepartments() != null) emp.setDepartments(employee.getDepartments());
+            if (employee.getGender() != null) emp.setGender(employee.getGender());
+            if (employee.getNote() != null) emp.setNote(employee.getNote());
+            if (employee.getProfilePic() != null) emp.setProfilePic(employee.getProfilePic());
+            if (employee.getStartDate() != null) emp.setStartDate(employee.getStartDate());
+            log.info("Employee updated with id: {}", emp.getEmployeeId());
             repository.save(emp);
 
             log.info("Updated Successfully!");
